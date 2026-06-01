@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Lock viewport — no page-level scroll; each section scrolls internally */
+html, body { height: 100%; overflow: hidden; }
+#root { height: 100%; overflow: hidden; display: flex; flex-direction: column; }
+
+@layer base {
+  /* ── Dark mode (default) ───────────────────────────────────────────────── */
+  :root {
+    --color-bg:     26 26 26;
+    --color-panel:  40 40 40;
+    --color-card:   45 45 45;
+    --color-border: 61 61 61;
+    --color-hover:  56 56 56;
+    --color-input:  31 31 31;
+    --color-accent: 255 161 22;
+    --color-accent-muted: 255 161 22;
+    --color-accent-fg: 0 0 0;
+    --scrollbar-track: #1a1a1a;
+    --scrollbar-thumb: #3d3d3d;
+  }
+
+  /* SQL mode — warm amber accent (default) */
+  html.mode-sql {
+    --color-accent: 255 161 22;
+    --color-accent-muted: 255 161 22;
+    --color-accent-fg: 0 0 0;
+  }
+
+  /* Python mode — cool blue accent + subtle panel tint */
+  html.mode-python {
+    --color-accent: 55 118 171;
+    --color-accent-muted: 74 144 217;
+    --color-accent-fg: 255 255 255;
+    --color-panel: 34 38 46;
+    --color-card: 38 44 54;
+    --color-border: 52 62 78;
+    --color-hover: 46 54 66;
+  }
+
+  html.mode-python:not(.dark) {
+    --color-panel:  240 247 255;
+    --color-card:   232 241 252;
+    --color-border: 191 219 254;
+    --color-hover:  219 234 254;
+  }
+
+  /* ── Light mode — applied when .dark class is removed from <html> ──────── */
+  html:not(.dark) {
+    --color-bg:     249 250 251; /* gray-50  */
+    --color-panel:  255 255 255; /* white    */
+    --color-card:   243 244 246; /* gray-100 */
+    --color-border: 229 231 235; /* gray-200 */
+    --color-hover:  243 244 246; /* gray-100 */
+    --color-input:  249 250 251; /* gray-50  */
+    --scrollbar-track: #f9fafb;
+    --scrollbar-thumb: #d1d5db;
+  }
+
+  /* Remap gray text shades in light mode so dark-bg text stays readable */
+  html:not(.dark) .text-gray-100 { color: rgb(17 24 39);   }  /* → gray-900 */
+  html:not(.dark) .text-gray-200 { color: rgb(31 41 55);   }  /* → gray-800 */
+  html:not(.dark) .text-gray-300 { color: rgb(55 65 81);   }  /* → gray-700 */
+  html:not(.dark) .text-gray-400 { color: rgb(75 85 99);   }  /* → gray-600 */
+  html:not(.dark) .text-gray-500 { color: rgb(107 114 128); } /* → gray-500 */
+  html:not(.dark) .text-gray-600 { color: rgb(156 163 175); } /* → gray-400 */
+  html:not(.dark) .placeholder-gray-500::placeholder { color: rgb(156 163 175); }
+  /* text-white flips to near-black in light mode */
+  html:not(.dark) .text-white { color: rgb(17 24 39); }        /* → gray-900 */
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+  *::-webkit-scrollbar { width: 6px; height: 6px; }
+  *::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+  *::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+
+  html { font-family: 'Inter', system-ui, sans-serif; }
+  body { @apply bg-dark-bg text-gray-100 antialiased; }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-accent hover:opacity-90 text-accent-fg font-semibold px-4 py-2 rounded-lg
+           transition-colors duration-150 text-sm;
+  }
+
+  .btn-ghost {
+    @apply text-gray-400 hover:text-gray-200 hover:bg-dark-hover px-3 py-1.5 rounded-lg
+           transition-colors duration-150 text-sm;
+  }
+
+  .difficulty-easy   { @apply text-success bg-success/10; }
+  .difficulty-medium { @apply text-yellow-400 bg-yellow-400/10; }
+  .difficulty-hard   { @apply text-error bg-error/10; }
+
+  .status-solved    { @apply text-success; }
+  .status-attempted { @apply text-yellow-400; }
+  .status-unsolved  { @apply text-gray-500; }
+
+  .tag {
+    @apply px-2 py-0.5 rounded text-xs font-medium bg-dark-card text-gray-400 border border-dark-border;
+  }
+
+  .input {
+    @apply w-full bg-dark-input border border-dark-border rounded-lg px-3 py-2 text-sm text-gray-100
+           placeholder-gray-500 focus:outline-none focus:border-accent/60 transition-colors;
+  }
+}
